@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Daily DSA Streak 🎀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ============================================================
+     ⚙️  CONFIG  — edit these values, nothing else needed
+     ============================================================ */
+  /* (JS config lives at the bottom of this file) */
+
+  :root{
+    --pink-1:#ffe3ef;
+    --pink-2:#ffc6de;
+    --pink-3:#ff9ec4;
+    --pink-hot:#ff5fa2;
+    --red-bow:#ff3b6b;
+    --ink:#5b3a4a;
+    --ink-soft:#9a6f83;
+    --card:#ffffff;
+    --gold:#ffb84d;
+    --mint:#7fe0c3;
+    --shadow:0 10px 30px rgba(255,95,162,.18);
+    --shadow-lg:0 18px 50px rgba(255,95,162,.28);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Quicksand',system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 12% 8%, #fff 0 6px, transparent 7px) 0 0/60px 60px,
+      radial-gradient(circle at 62% 42%, #fff 0 5px, transparent 6px) 0 0/70px 70px,
+      linear-gradient(160deg,var(--pink-1),var(--pink-2) 55%,#ffd9e8);
+    min-height:100%;
+    padding:20px 14px 60px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto}
+
+  /* ---------- Header ---------- */
+  header{
+    text-align:center;
+    position:relative;
+    padding:8px 0 4px;
+  }
+  .kitty{width:96px;height:96px;margin:0 auto;display:block;filter:drop-shadow(0 6px 12px rgba(255,59,107,.25))}
+  h1{
+    font-family:'Baloo 2',cursive;
+    font-weight:800;
+    font-size:clamp(26px,6vw,40px);
+    line-height:1.05;
+    margin-top:6px;
+    color:var(--ink);
+  }
+  h1 .name{color:var(--pink-hot)}
+  .subtitle{color:var(--ink-soft);font-weight:600;margin-top:4px;font-size:15px}
+
+  /* ---------- Love note (from you) ---------- */
+  .lovenote{
+    position:relative;
+    margin:18px auto 0;
+    background:linear-gradient(135deg,#fff,#ffeef6);
+    border-radius:22px;
+    padding:18px 20px 20px;
+    box-shadow:var(--shadow);
+    border:2px solid #fff;
+    font-family:'Baloo 2',cursive;
+    font-weight:500;
+    font-size:clamp(15px,3.8vw,17px);
+    line-height:1.5;
+    color:var(--ink);
+    text-align:center;
+  }
+  .lovenote::before{
+    content:"💌 a note for you";
+    position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+    background:var(--pink-hot);color:#fff;font-family:'Quicksand';font-weight:700;
+    font-size:12px;padding:4px 14px;border-radius:999px;white-space:nowrap;
+    box-shadow:0 4px 10px rgba(255,95,162,.35);
+  }
+  .lovenote .sign{display:block;margin-top:10px;color:var(--pink-hot);font-weight:700;font-size:14px}
+
+  /* ---------- Kinder Joy icon ---------- */
+  .kj{width:26px;height:34px;vertical-align:-8px}
+
+  /* ---------- Praise banner ---------- */
+  .praise{
+    margin:18px auto 0;
+    background:linear-gradient(120deg,#fff,#fff0f6);
+    border:2px dashed var(--pink-3);
+    border-radius:20px;
+    padding:14px 18px;
+    text-align:center;
+    font-weight:700;
+    font-size:clamp(15px,4vw,18px);
+    color:var(--pink-hot);
+    box-shadow:var(--shadow);
+    min-height:52px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+
+  /* ---------- Stat row ---------- */
+  .stats{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px;
+  }
+  .stat{
+    background:var(--card);border-radius:22px;padding:16px 10px;text-align:center;
+    box-shadow:var(--shadow);border:2px solid #fff;
+  }
+  .stat .big{font-family:'Baloo 2';font-weight:800;font-size:34px;line-height:1;color:var(--pink-hot)}
+  .stat .lbl{font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-top:6px;text-transform:uppercase;letter-spacing:.5px}
+  .stat .fire{font-size:22px}
+
+  /* ---------- Week grid ---------- */
+  .section-title{
+    font-family:'Baloo 2';font-weight:700;font-size:20px;margin:26px 4px 12px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+  @media(max-width:560px){.days{grid-template-columns:repeat(4,1fr)}}
+  .day{
+    background:var(--card);border-radius:18px;padding:10px 6px 12px;text-align:center;
+    border:2px solid #fff;box-shadow:0 6px 16px rgba(255,95,162,.12);
+    cursor:pointer;transition:transform .15s ease, box-shadow .15s ease;
+    position:relative;user-select:none;
+  }
+  .day:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .day .dow{font-size:11px;font-weight:700;color:var(--ink-soft);text-transform:uppercase}
+  .day .dnum{font-family:'Baloo 2';font-weight:800;font-size:18px;margin-top:2px}
+  .day .face{font-size:26px;margin-top:6px;line-height:1}
+  .day .mins{font-size:10.5px;font-weight:700;color:var(--ink-soft);margin-top:3px;height:12px}
+  .day.done{background:linear-gradient(160deg,#fff,#ffe9f2);border-color:var(--pink-3)}
+  .day.done .dnum{color:var(--pink-hot)}
+  .day.today{outline:3px solid var(--pink-hot);outline-offset:1px}
+  .day.future{opacity:.5;cursor:not-allowed}
+  .day .bow{position:absolute;top:-8px;right:-6px;font-size:18px;transform:rotate(15deg);display:none}
+  .day.done .bow{display:block}
+
+  /* ---------- Rewards ---------- */
+  .rewards{
+    background:var(--card);border-radius:24px;padding:20px;margin-top:24px;
+    box-shadow:var(--shadow);border:2px solid #fff;
+  }
+  .kinder-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0 4px}
+  .kinder{font-size:30px;filter:grayscale(1) opacity(.35);transition:.3s}
+  .kinder.earned{filter:none;transform:scale(1.05)}
+  .reward-note{text-align:center;color:var(--ink-soft);font-weight:600;font-size:13.5px;margin-top:6px}
+  .gift-bar-wrap{background:var(--pink-1);border-radius:999px;height:22px;margin-top:16px;overflow:hidden;position:relative}
+  .gift-bar{height:100%;width:0;background:linear-gradient(90deg,var(--pink-3),var(--pink-hot));border-radius:999px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+  .gift-label{text-align:center;font-weight:700;margin-top:10px;font-size:15px}
+  .gift-label.unlocked{color:var(--pink-hot)}
+
+  /* ---------- Check-in button + form ---------- */
+  .checkin{
+    position:sticky;bottom:14px;margin-top:26px;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .btn{
+    font-family:'Baloo 2';font-weight:800;font-size:19px;color:#fff;
+    background:linear-gradient(120deg,var(--pink-hot),var(--red-bow));
+    border:none;border-radius:20px;padding:16px;cursor:pointer;
+    box-shadow:var(--shadow-lg);transition:transform .12s ease, filter .2s;
+  }
+  .btn:hover{filter:brightness(1.05)}
+  .btn:active{transform:scale(.98)}
+  .btn:disabled{filter:grayscale(.5) brightness(.98);cursor:default;box-shadow:var(--shadow)}
+  .btn.secondary{background:#fff;color:var(--pink-hot);border:2px solid var(--pink-3);box-shadow:var(--shadow);font-size:15px;padding:12px}
+
+  .modal-back{
+    position:fixed;inset:0;background:rgba(91,58,74,.45);backdrop-filter:blur(3px);
+    display:none;align-items:center;justify-content:center;padding:18px;z-index:50;
+  }
+  .modal-back.show{display:flex}
+  .modal{
+    background:#fff;border-radius:26px;padding:24px;max-width:400px;width:100%;
+    box-shadow:var(--shadow-lg);text-align:center;
+  }
+  .modal h3{font-family:'Baloo 2';font-size:24px;margin-bottom:4px}
+  .modal p{color:var(--ink-soft);font-weight:600;font-size:14px;margin-bottom:16px}
+  .mins-opts{display:flex;gap:10px;margin-bottom:14px}
+  .mins-opt{
+    flex:1;padding:14px 8px;border-radius:16px;border:2px solid var(--pink-2);
+    background:var(--pink-1);cursor:pointer;font-weight:700;color:var(--ink);
+    transition:.15s;font-size:13.5px;
+  }
+  .mins-opt .emoji{font-size:24px;display:block;margin-bottom:4px}
+  .mins-opt.sel{background:var(--pink-hot);color:#fff;border-color:var(--pink-hot);transform:translateY(-2px)}
+  .note-in{
+    width:100%;border:2px solid var(--pink-2);border-radius:14px;padding:12px;
+    font-family:inherit;font-size:14px;resize:vertical;min-height:60px;color:var(--ink);
+  }
+  .note-in:focus{outline:none;border-color:var(--pink-hot)}
+  .modal-actions{display:flex;gap:10px;margin-top:16px}
+  .modal-actions .btn{flex:1;font-size:16px;padding:13px}
+
+  /* ---------- Toast / status ---------- */
+  .toast{
+    position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(80px);
+    background:var(--ink);color:#fff;padding:12px 20px;border-radius:14px;font-weight:600;
+    font-size:14px;box-shadow:var(--shadow-lg);opacity:0;transition:.35s;z-index:80;pointer-events:none;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+  .banner{
+    background:#fff6d6;border:2px solid var(--gold);color:#8a5a00;border-radius:16px;
+    padding:12px 14px;font-size:13px;font-weight:600;text-align:center;margin-top:16px;
+  }
+  .banner a{color:#b06a00}
+  footer{text-align:center;margin-top:30px;color:var(--ink-soft);font-size:12px;font-weight:600}
+  footer .heart{color:var(--red-bow)}
+
+  /* ---------- Confetti ---------- */
+  .confetti{position:fixed;top:-20px;font-size:22px;pointer-events:none;z-index:90;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}
+</style>
+</head>
+<body>
+<!-- shared clip-path so every Kinder Joy icon keeps its egg shape -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <clipPath id="kjEgg" clipPathUnits="userSpaceOnUse">
+      <path d="M20 2C29 2 36 18 36 32c0 11-7 18-16 18S4 43 4 32C4 18 11 2 20 2Z"/>
+    </clipPath>
+  </defs>
+</svg>
+<div class="wrap">
+  <header>
+    <!-- Hello Kitty inspired face -->
+    <svg class="kitty" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <ellipse cx="60" cy="55" rx="48" ry="40" fill="#fff" stroke="#ffb0d0" stroke-width="2"/>
+      <path d="M20 30 Q14 6 34 18 Q44 24 40 36 Z" fill="#fff" stroke="#ffb0d0" stroke-width="2"/>
+      <path d="M100 30 Q106 6 86 18 Q76 24 80 36 Z" fill="#fff" stroke="#ffb0d0" stroke-width="2"/>
+      <ellipse cx="42" cy="56" rx="4.5" ry="6" fill="#4a2f3c"/>
+      <ellipse cx="78" cy="56" rx="4.5" ry="6" fill="#4a2f3c"/>
+      <ellipse cx="60" cy="62" rx="5" ry="3.5" fill="#ffcf4d"/>
+      <g stroke="#c9a0b3" stroke-width="1.6" stroke-linecap="round">
+        <line x1="14" y1="52" x2="34" y2="54"/><line x1="14" y1="60" x2="34" y2="60"/><line x1="15" y1="68" x2="34" y2="66"/>
+        <line x1="106" y1="52" x2="86" y2="54"/><line x1="106" y1="60" x2="86" y2="60"/><line x1="105" y1="68" x2="86" y2="66"/>
+      </g>
+      <!-- bow -->
+      <g transform="translate(84,30)">
+        <path d="M0 0 L-16 -9 L-16 9 Z" fill="#ff3b6b"/>
+        <path d="M0 0 L16 -9 L16 9 Z" fill="#ff3b6b"/>
+        <circle cx="0" cy="0" r="5" fill="#ff6b93"/>
+      </g>
+    </svg>
+    <h1>Show-Up Streak, <span class="name" id="friendName">Sweetie</span> 🎀</h1>
+    <p class="subtitle" id="weekSubtitle">Your 7-day DSA consistency quest</p>
+  </header>
+
+  <div class="lovenote" id="loveNote"></div>
+
+  <div class="praise" id="praise">Loading your streak… 🌸</div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="big" id="streakNum">0<span class="fire">🔥</span></div>
+      <div class="lbl">Day Streak</div>
+    </div>
+    <div class="stat">
+      <div class="big" id="doneNum">0<span style="font-size:20px">/7</span></div>
+      <div class="lbl">Days Shown Up</div>
+    </div>
+    <div class="stat">
+      <div class="big" id="kinderNum">0🍫</div>
+      <div class="lbl">Kinder Joys</div>
+    </div>
+  </div>
+
+  <div class="section-title">📅 This Week</div>
+  <div class="days" id="daysGrid"></div>
+
+  <div class="rewards">
+    <div class="section-title" style="margin:0 0 6px">🎁 Rewards</div>
+    <div class="reward-note">One <b>Kinder Joy</b> for every day you show up 🍫</div>
+    <div class="kinder-row" id="kinderRow"></div>
+    <div class="gift-bar-wrap"><div class="gift-bar" id="giftBar"></div></div>
+    <div class="gift-label" id="giftLabel">0 / 7 days → Surprise gift locked 🔒</div>
+  </div>
+
+  <div class="banner" id="setupBanner" style="display:none">
+    ⚠️ Not connected to your Google Sheet yet. Progress won't be saved.
+    Open this file and paste your Apps Script URL into <b>SHEET_API_URL</b>.
+  </div>
+
+  <div class="checkin">
+    <button class="btn" id="checkinBtn">✅ I showed up today!</button>
+    <button class="btn secondary" id="refreshBtn">↻ Refresh from sheet</button>
+  </div>
+
+  <footer>Made with <span class="heart">♥</span> — consistency &gt; intensity. You've got this.</footer>
+</div>
+
+<!-- Check-in modal -->
+<div class="modal-back" id="modalBack">
+  <div class="modal">
+    <h3>Log today 🌸</h3>
+    <p id="modalDate">How long did you study?</p>
+    <div class="mins-opts" id="minsOpts">
+      <div class="mins-opt" data-mins="15"><span class="emoji">🌱</span>~15 min<br><small>Showed up</small></div>
+      <div class="mins-opt" data-mins="30"><span class="emoji">💪</span>~30 min<br><small>Solid</small></div>
+      <div class="mins-opt" data-mins="60"><span class="emoji">🔥</span>1 hr+<br><small>Warrior</small></div>
+    </div>
+    <textarea class="note-in" id="noteIn" placeholder="What did you solve today? (optional) e.g. 2 array problems + recursion"></textarea>
+    <div class="modal-actions">
+      <button class="btn secondary" id="cancelBtn">Cancel</button>
+      <button class="btn" id="saveBtn">Save 🎀</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   ⚙️  CONFIG  —  EDIT THESE FOUR THINGS
+   ============================================================ */
+const CONFIG = {
+  // 1) Your friend's name (shows in the title)
+  FRIEND_NAME: "Sweetie",
+
+  // 2) The day the quest starts — format YYYY-MM-DD (starts TODAY)
+  WEEK_START: "2026-07-11",
+
+  // 3) Your personal note to her — shows front and center every day.
+  //    Rewrite this in your own words anytime.
+  MOTIVATION: "Sweetie, I see how hard you're trying and it does not go unnoticed. Every single question you sit with is quietly making you sharper and your future brighter. You don't have to be perfect, you just have to keep showing up, and I already believe you can. Proud of you today, and every day. 💗",
+
+  // 4) Paste the Apps Script Web App URL here after you deploy it
+  //    (ends with /exec). Leave "" to preview without saving.
+  SHEET_API_URL: "",
+
+  // 5) Optional: a secret word so only people with the link can write.
+  //    Must match the SECRET in your Apps Script. Leave "" if you skip it.
+  SECRET: ""
+};
+/* ========================= end config ======================= */
+
+const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+// Kinder Joy egg icon (cream + cocoa halves with the Kinder-red band)
+const KINDER = `<svg class="kj" viewBox="0 0 40 52" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#kjEgg)">
+    <rect x="0" y="0" width="20" height="52" fill="#f7e3c3"/>
+    <rect x="20" y="0" width="20" height="52" fill="#8a5a3b"/>
+    <rect x="0" y="21" width="40" height="7" fill="#ff3b6b"/>
+  </g>
+  <path d="M20 2C29 2 36 18 36 32c0 11-7 18-16 18S4 43 4 32C4 18 11 2 20 2Z" fill="none" stroke="#e0975a" stroke-width="2"/>
+  <ellipse cx="12" cy="15" rx="2.6" ry="4.5" fill="#fff" opacity=".55"/>
+</svg>`;
+const PRAISES_STREAK = [
+  n => `🔥 ${n}-day streak! You are officially unstoppable.`,
+  n => `🌟 ${n} days in a row — future-you is cheering so loud.`,
+  n => `💗 ${n} days straight. Discipline looks GOOD on you.`,
+  n => `🚀 ${n}-day streak! Small steps, huge momentum.`
+];
+const PRAISE_TODAY = [
+  "Yay! You showed up today 🎀 that's a win.",
+  "Another day, another Kinder Joy earned 🍫✨",
+  "Look at you being consistent 💪 so proud.",
+  "Today counts. You're building something real 🌸"
+];
+const PRAISE_IDLE = [
+  "Ready when you are — 15 mins still counts 🌱",
+  "Today's box is empty… let's fix that 🎀",
+  "Show up today and keep the fire alive 🔥",
+  "One tiny session = one Kinder Joy. Go 💗"
+];
+
+let STATE = {};   // { "YYYY-MM-DD": {minutes, note} }
+
+/* ---------- date helpers ---------- */
+function addDays(iso, n){
+  const d = new Date(iso + "T00:00:00");
+  d.setDate(d.getDate() + n);
+  return d;
+}
+function isoOf(d){
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function todayIso(){ return isoOf(new Date()); }
+function weekDates(){ return Array.from({length:7}, (_,i)=>isoOf(addDays(CONFIG.WEEK_START,i))); }
+
+/* ---------- rendering ---------- */
+function render(){
+  const dates = weekDates();
+  const today = todayIso();
+  const doneDates = dates.filter(d=>STATE[d]);
+  const doneCount = doneDates.length;
+
+  // current streak = consecutive done days ending at the most recent past/today
+  let streak = 0;
+  for(let i=dates.length-1;i>=0;i--){
+    if(dates[i] > today) continue;         // ignore future
+    if(STATE[dates[i]]) streak++;
+    else break;
+  }
+
+  document.getElementById("friendName").textContent = CONFIG.FRIEND_NAME;
+  document.getElementById("weekSubtitle").textContent =
+    "7-day quest starting " + new Date(CONFIG.WEEK_START+"T00:00:00").toDateString();
+  document.getElementById("loveNote").innerHTML =
+    CONFIG.MOTIVATION + '<span class="sign">— believing in you, always 🎀</span>';
+  document.getElementById("streakNum").innerHTML = streak + '<span class="fire">🔥</span>';
+  document.getElementById("doneNum").innerHTML = doneCount + '<span style="font-size:20px">/7</span>';
+  document.getElementById("kinderNum").innerHTML = doneCount + '<span style="display:inline-block;vertical-align:middle;margin-left:2px">'+KINDER+'</span>';
+
+  // day cards
+  const grid = document.getElementById("daysGrid");
+  grid.innerHTML = "";
+  dates.forEach((iso,i)=>{
+    const d = new Date(iso+"T00:00:00");
+    const done = !!STATE[iso];
+    const isToday = iso === today;
+    const isFuture = iso > today;
+    const mins = done ? STATE[iso].minutes : 0;
+    const face = done ? (mins>=60?"😻":mins>=30?"😸":"😺") : (isFuture?"⚪":"🌸");
+    const el = document.createElement("div");
+    el.className = "day" + (done?" done":"") + (isToday?" today":"") + (isFuture?" future":"");
+    el.innerHTML =
+      '<div class="bow">🎀</div>'+
+      '<div class="dow">'+DOW[d.getDay()]+'</div>'+
+      '<div class="dnum">'+d.getDate()+'</div>'+
+      '<div class="face">'+face+'</div>'+
+      '<div class="mins">'+(done?(mins>=60?"1hr+":mins+"m"):"")+'</div>';
+    if(!isFuture) el.addEventListener("click", ()=>openModal(iso));
+    grid.appendChild(el);
+  });
+
+  // kinder joys
+  const kr = document.getElementById("kinderRow");
+  kr.innerHTML = "";
+  for(let i=0;i<7;i++){
+    const k = document.createElement("span");
+    k.className = "kinder" + (i<doneCount?" earned":"");
+    k.innerHTML = KINDER;
+    kr.appendChild(k);
+  }
+
+  // gift bar
+  document.getElementById("giftBar").style.width = (doneCount/7*100)+"%";
+  const gl = document.getElementById("giftLabel");
+  if(doneCount>=7){
+    gl.textContent = "🎉 7/7 — SURPRISE GIFT UNLOCKED! 🎁";
+    gl.classList.add("unlocked");
+  }else{
+    gl.textContent = doneCount+" / 7 days → Surprise gift locked 🔒";
+    gl.classList.remove("unlocked");
+  }
+
+  // praise line
+  const praise = document.getElementById("praise");
+  if(doneCount>=7){
+    praise.textContent = "🏆 Full week complete! You did the whole thing. Iconic.";
+  }else if(STATE[today]){
+    praise.textContent = pick(PRAISE_TODAY);
+  }else if(streak>=1){
+    praise.textContent = pick(PRAISES_STREAK)(streak);
+  }else{
+    praise.textContent = pick(PRAISE_IDLE);
+  }
+
+  // today's button state
+  const btn = document.getElementById("checkinBtn");
+  if(STATE[today]){
+    btn.textContent = "🎀 Already logged today — edit?";
+  }else{
+    btn.textContent = "✅ I showed up today!";
+  }
+}
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+
+/* ---------- modal ---------- */
+let modalDate = null, selMins = 30;
+function openModal(iso){
+  modalDate = iso;
+  const existing = STATE[iso];
+  selMins = existing ? existing.minutes : 30;
+  document.getElementById("modalDate").textContent =
+    new Date(iso+"T00:00:00").toDateString() + " — how long did you study?";
+  document.getElementById("noteIn").value = existing ? (existing.note||"") : "";
+  document.querySelectorAll(".mins-opt").forEach(o=>{
+    o.classList.toggle("sel", Number(o.dataset.mins)===selMins);
+  });
+  document.getElementById("modalBack").classList.add("show");
+}
+function closeModal(){ document.getElementById("modalBack").classList.remove("show"); }
+
+document.querySelectorAll(".mins-opt").forEach(o=>{
+  o.addEventListener("click", ()=>{
+    selMins = Number(o.dataset.mins);
+    document.querySelectorAll(".mins-opt").forEach(x=>x.classList.remove("sel"));
+    o.classList.add("sel");
+  });
+});
+document.getElementById("checkinBtn").addEventListener("click", ()=>openModal(todayIso()));
+document.getElementById("cancelBtn").addEventListener("click", closeModal);
+document.getElementById("modalBack").addEventListener("click", e=>{ if(e.target.id==="modalBack") closeModal(); });
+document.getElementById("saveBtn").addEventListener("click", saveEntry);
+document.getElementById("refreshBtn").addEventListener("click", ()=>loadData(true));
+
+/* ---------- save ---------- */
+async function saveEntry(){
+  const note = document.getElementById("noteIn").value.trim();
+  const iso = modalDate;
+  const wasDone = !!STATE[iso];
+  STATE[iso] = { minutes: selMins, note };
+  closeModal();
+  render();
+  if(iso===todayIso() && !wasDone){ celebrate(); }
+  const doneCount = weekDates().filter(d=>STATE[d]).length;
+  if(doneCount>=7){ setTimeout(celebrate,300); setTimeout(celebrate,600); }
+
+  if(!CONFIG.SHEET_API_URL){
+    toast("Saved locally (sheet not connected)");
+    return;
+  }
+  try{
+    await fetch(CONFIG.SHEET_API_URL, {
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"}, // text/plain avoids CORS preflight
+      body: JSON.stringify({ date:iso, minutes:selMins, note, secret:CONFIG.SECRET })
+    });
+    toast("Saved to your sheet 🎀");
+  }catch(err){
+    toast("⚠️ Couldn't reach sheet — try Refresh");
+  }
+}
+
+/* ---------- load ---------- */
+async function loadData(showToast){
+  if(!CONFIG.SHEET_API_URL){
+    document.getElementById("setupBanner").style.display = "block";
+    render();
+    return;
+  }
+  try{
+    const res = await fetch(CONFIG.SHEET_API_URL + "?t=" + Date.now());
+    const rows = await res.json();  // [{date, minutes, note}, ...]
+    STATE = {};
+    rows.forEach(r=>{
+      if(r && r.date){ STATE[r.date] = { minutes:Number(r.minutes)||15, note:r.note||"" }; }
+    });
+    render();
+    if(showToast) toast("Refreshed ✨");
+  }catch(err){
+    if(showToast) toast("⚠️ Couldn't load from sheet");
+    render();
+  }
+}
+
+/* ---------- fun ---------- */
+function celebrate(){
+  const emojis = ["🎀","🍫","💗","🌸","⭐","🎉","😻"];
+  for(let i=0;i<28;i++){
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    c.style.left = Math.random()*100 + "vw";
+    c.style.animationDuration = (2+Math.random()*1.8)+"s";
+    c.style.fontSize = (16+Math.random()*16)+"px";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4200);
+  }
+}
+let toastTimer;
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove("show"), 2600);
+}
+
+/* ---------- go ---------- */
+loadData(false);
+</script>
+</body>
+</html>
